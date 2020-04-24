@@ -1,5 +1,7 @@
 package br.ce.wcaquino.tasks.functional;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -8,21 +10,26 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 public class TasksTest {
 
-	public WebDriver acessarAplicacao(){
+	public WebDriver acessarAplicacao() throws MalformedURLException{
 
 
 		System.setProperty("webdriver.chrome.driver","src/test/resources/chromedriver.exe");
-		WebDriver driver = new ChromeDriver();
-		driver.navigate().to("http://localhost:8001/tasks");
+		//WebDriver driver = new ChromeDriver();
+		DesiredCapabilities cap = DesiredCapabilities.chrome();
+		WebDriver driver = new RemoteWebDriver(new URL("http://192.168.0.2:4444/wd/hub"),cap);
+		
+		driver.navigate().to("http://192.168.0.2:8001/tasks");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		return driver;
 	}
 	
 	@Test
-	public void deveSalvarTarefaComSucesso(){
+	public void deveSalvarTarefaComSucesso() throws MalformedURLException, InterruptedException{
 		
 		WebDriver driver = acessarAplicacao();
 		
@@ -35,6 +42,8 @@ public class TasksTest {
 				driver.findElement(By.id("dueDate")).sendKeys("24/04/2020");
 				
 				driver.findElement(By.id("saveButton")).click();
+				
+				Thread.sleep(5000);
 				
 				String message = driver.findElement(By.id("message")).getText();
 				
@@ -51,7 +60,7 @@ public class TasksTest {
 	
 	
 	@Test
-	public void naodeveSalvarTarefaSemDescricao(){
+	public void naodeveSalvarTarefaSemDescricao() throws MalformedURLException, InterruptedException{
 		
 		WebDriver driver = acessarAplicacao();
 		
@@ -63,8 +72,10 @@ public class TasksTest {
 				
 				driver.findElement(By.id("saveButton")).click();
 				
-				String message = driver.findElement(By.id("message")).getText();
+				Thread.sleep(5000);
 				
+				String message = driver.findElement(By.id("message")).getText();
+								
 				Assert.assertEquals("Fill the task description", message);
 				
 				driver.quit();
@@ -77,7 +88,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void naodeveSalvarTarefaSemData(){
+	public void naodeveSalvarTarefaSemData() throws MalformedURLException, InterruptedException{
 		
 		WebDriver driver = acessarAplicacao();
 		
@@ -89,7 +100,10 @@ public class TasksTest {
 				
 				driver.findElement(By.id("saveButton")).click();
 				
+				Thread.sleep(5000);
+				
 				String message = driver.findElement(By.id("message")).getText();
+				
 				
 				Assert.assertEquals("Fill the due date", message);
 				
@@ -103,7 +117,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void naodeveSalvarTarefaComDataPassada(){
+	public void naodeveSalvarTarefaComDataPassada() throws MalformedURLException, InterruptedException{
 		
 		WebDriver driver = acessarAplicacao();
 		
@@ -116,6 +130,8 @@ public class TasksTest {
 				driver.findElement(By.id("dueDate")).sendKeys("20/04/2020");
 				
 				driver.findElement(By.id("saveButton")).click();
+				
+				Thread.sleep(5000);
 				
 				String message = driver.findElement(By.id("message")).getText();
 				
