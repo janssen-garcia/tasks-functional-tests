@@ -9,7 +9,9 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriver.Options;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -20,7 +22,12 @@ public class TasksTest {
 
 		System.setProperty("webdriver.chrome.driver","src/test/resources/chromedriver.exe");
 		//WebDriver driver = new ChromeDriver();
+		ChromeOptions chrome_options = new ChromeOptions();
+				chrome_options.addArguments("--headless");
+				chrome_options.addArguments("--no-sandbox");
+				chrome_options.addArguments("--disable-dev-shm-usage");
 		DesiredCapabilities cap = DesiredCapabilities.chrome();
+		cap.setCapability(ChromeOptions.CAPABILITY,chrome_options);
 		WebDriver driver = new RemoteWebDriver(new URL("http://192.168.0.2:4444/wd/hub"),cap);
 		
 		driver.navigate().to("http://192.168.0.2:8001/tasks");
