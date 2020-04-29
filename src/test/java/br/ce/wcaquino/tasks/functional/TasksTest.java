@@ -2,6 +2,7 @@ package br.ce.wcaquino.tasks.functional;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -28,9 +29,9 @@ public class TasksTest {
 				chrome_options.addArguments("--disable-dev-shm-usage");
 		DesiredCapabilities cap = DesiredCapabilities.chrome();
 		cap.setCapability(ChromeOptions.CAPABILITY,chrome_options);
-		WebDriver driver = new RemoteWebDriver(new URL("http://192.168.0.2:4444/wd/hub"),cap);
+		WebDriver driver = new RemoteWebDriver(new URL("http://192.168.0.4:4444/wd/hub"),cap);
 		
-		driver.navigate().to("http://192.168.0.2:8001/tasks");
+		driver.navigate().to("http://192.168.0.4:8001/tasks");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		return driver;
 	}
@@ -46,7 +47,7 @@ public class TasksTest {
 				
 				driver.findElement(By.id("task")).sendKeys("Test via Selenium");
 				
-				driver.findElement(By.id("dueDate")).sendKeys("24/04/2020");
+				driver.findElement(By.id("dueDate")).sendKeys(LocalDate.now().toString());
 				
 				driver.findElement(By.id("saveButton")).click();
 				
