@@ -3,6 +3,8 @@ package br.ce.wcaquino.tasks.functional;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -47,7 +49,13 @@ public class TasksTest {
 				
 				driver.findElement(By.id("task")).sendKeys("Test via Selenium");
 				
-				driver.findElement(By.id("dueDate")).sendKeys("06/05/2020");
+				LocalDate hoje = LocalDate.now();
+				
+		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+		        String hojeFormatado = hoje.format(formatter);				
+				
+				driver.findElement(By.id("dueDate")).sendKeys(hojeFormatado);
 				
 				driver.findElement(By.id("saveButton")).click();
 				
